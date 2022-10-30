@@ -1,5 +1,7 @@
 import httpx
 from dataclasses import dataclass
+from pokeapidash.session.db_session import create_session
+from pokeapidash.models.move import PokemonMoves
 
 
 @dataclass
@@ -11,11 +13,6 @@ class PokeMoves:
     move_learn_method: str
     version_group: str
 
-params = {'limit': '100000', 'offset': 0}
-r = httpx.get('https://pokeapi.co/api/v2/pokemon', params=params)
-results = r.json().get('results')
-#
-# r = httpx.get('https://pokeapi.co/api/v2/pokemon/2/').json()
 
 class Moves:
 
@@ -38,13 +35,27 @@ class Moves:
 
     def get_moves(self, url: str) -> list:
         p1 = httpx.get(url).json()
+        print(url)
         return self.get_move_info(p1)
 
     @property
     def extract(self) -> list:
-        print(self.url)
         urls = httpx.get(self.url, params=self.params).json().get('results')
         return [self.get_moves(url.get('url')) for url in urls]
 
-m = Moves('https://pokeapi.co/api/v2/pokemon')
-dados = m.extract
+    def insert_table(self):
+        moves = self.extract
+        session = create_session()
+        session.add_all(moves)
+        session.commit()
+
+
+moves = Moves('https://pokeapi.co/api/v2/pokemon')
+results = moves.extract
+
+r = PokemonMoves(pokemon_name='bulbasaur', move_name='razor-wind', move_id='https://pokeapi.co/api/v2/move/13/',
+                 level_learned_at=0, move_learn_method='egg', version_group='gold-silver')
+
+with create_session() as session:
+    session.add(r)
+    session.commit()
