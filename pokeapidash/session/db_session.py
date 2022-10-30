@@ -22,3 +22,13 @@ def create_tables() -> None:
     ModelBase.metadata.drop_all(engine)
     ModelBase.metadata.create_all(engine)
 
+def insert_one(data):
+    with create_session() as session:
+        session.add(data)
+        session.commit()
+
+def insert_many(data):
+    with create_session() as session:
+        session.add_all(data)
+        session.commit()
+
