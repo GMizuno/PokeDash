@@ -1,5 +1,5 @@
-from pokeapidash.models.move import PokemonMoves
-from pokeapidash.requests.requester import Requester
+from pokeapidata.models.move import PokemonMoves
+from pokeapidata.requests.requester import Requester
 
 
 class Moves(Requester):
@@ -14,6 +14,10 @@ class Moves(Requester):
                 level_learned_at = i.get('level_learned_at')
                 move_learn_method = i.get('move_learn_method').get('name')
                 version_group = i.get('version_group').get('name')
-                moves.append(PokemonMoves(poke_name, move_name, url, level_learned_at, move_learn_method, version_group))
+                moves.append(PokemonMoves(pokemon_name=poke_name,
+                                          move_name=move_name,
+                                          move_id=url,
+                                          level_learned_at=level_learned_at,
+                                          move_learn_method=move_learn_method,
+                                          version_group=version_group))
         return moves
-

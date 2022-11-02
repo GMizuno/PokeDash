@@ -12,6 +12,10 @@ class Requester:
         print(url)
         return self.get_info(p1)
 
+    @abstractmethod
+    def get_info(self, result: dict) -> list:
+        pass
+
     @property
     def extract(self) -> list:
         urls = httpx.get(self.url, params=self.params).json().get('results')
@@ -19,7 +23,3 @@ class Requester:
         for url in urls:
             data += self.get_data(url.get('url'))
         return data
-
-    @abstractmethod
-    def get_info(self, result: dict) -> list:
-        pass

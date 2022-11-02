@@ -1,10 +1,9 @@
 import sqlalchemy as sa
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.future.engine import Engine
 
-from pokeapidash.models.basemodel import ModelBase
-import pokeapidash.models.all_models
+from pokeapidata.models.basemodel import ModelBase
+import pokeapidata.models.all_models
 
 
 def create_engine() -> Engine:
@@ -19,6 +18,7 @@ def create_session() -> Session:
 
 def create_tables() -> None:
     engine = create_engine()
+    print(ModelBase.metadata)
     ModelBase.metadata.drop_all(engine)
     ModelBase.metadata.create_all(engine)
 
