@@ -36,4 +36,37 @@ def get_pokemon_by_region(region: str = 'kanto'):
     return [i[0] for i in pokemon]
 
 
-get_pokemon_by_region()
+def get_status(pokemon: str):
+    session = create_session()
+
+    pokemon = session.query(PokemonPokemon.hp,
+                            PokemonPokemon.attack,
+                            PokemonPokemon.defense,
+                            PokemonPokemon.special_attack,
+                            PokemonPokemon.special_defense,
+                            PokemonPokemon.speed,
+                            PokemonPokemon.height,
+                            PokemonPokemon.weight). \
+        filter(PokemonPokemon.pokemon_name == pokemon).all()
+
+    return pokemon
+
+
+def get_front_img(pokemon: str):
+    session = create_session()
+
+    pokemon = session.query(PokemonPokemon.front_sprite). \
+        filter(PokemonPokemon.pokemon_name == pokemon).all()
+
+    return pokemon[0][0]
+
+
+def get_back_img(pokemon: str):
+    session = create_session()
+
+    pokemon = session.query(PokemonPokemon.back_sprite). \
+        filter(PokemonPokemon.pokemon_name == pokemon).all()
+
+    return pokemon[0][0]
+
+get_front_img('muk')

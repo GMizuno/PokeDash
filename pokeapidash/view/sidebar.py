@@ -13,10 +13,10 @@ sidebar = html.Div(
             ),
             dbc.Nav(
                     [
-                        dcc.Dropdown(options=get_region(), id='region_dropdown'),
+                        dcc.Dropdown(options=get_region(), value='kanto', id='region_dropdown'),
                         html.Hr(),
                         html.P("Pokemon", className="lead"),
-                        dcc.Dropdown(options=get_pokemon_by_region(), id='pokemon_dropdown'),
+                        dcc.Dropdown(options=get_pokemon_by_region(), value='muk', id='pokemon_dropdown'),
                         html.Br(),
                         dbc.Button("Refresh Report", className="refresh"),
                     ],

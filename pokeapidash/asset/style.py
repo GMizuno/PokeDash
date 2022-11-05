@@ -20,5 +20,3 @@ CARD_ICON = {
     "margin"   :"auto",
     "padding"  :"2rem 1rem",
 }
-
-FONT_AWESOME = "https://use.fontawesome.com/releases/v5.10.2/css/all.css"
