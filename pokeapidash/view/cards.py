@@ -1,7 +1,7 @@
 from dash import html
 import dash_bootstrap_components as dbc
 
-from pokeapidash.asset.style import CARD_ICON
+from pokeapidash.assets.style import CARD_ICON
 
 
 def card_template(card_id: str, name: str, color: str):

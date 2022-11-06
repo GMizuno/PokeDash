@@ -1,8 +1,6 @@
-from pokeapidash.connector_db.connect import create_session, create_engine
-from pokeapidata.models.all_models import PokemonMoves, PokemonVersion, PokemonPokemon
+from pokeapidash.connector_db.connect import create_session
+from pokeapidata.models.all_models import PokemonVersion, PokemonPokemon
 from sqlalchemy import func
-from sqlalchemy.orm import Session
-import pandas as pd
 
 
 def get_generation():
@@ -69,4 +67,28 @@ def get_back_img(pokemon: str):
 
     return pokemon[0][0]
 
-get_front_img('muk')
+
+def get_status_by_type(pokemon: str):
+    session = create_session()
+
+    pokemon_type = session.query(PokemonPokemon.type_1, PokemonPokemon.type_2). \
+        filter(PokemonPokemon.pokemon_name == pokemon).all()
+
+    pokemon = session.query(
+            func.avg(PokemonPokemon.hp).label('hp'),
+            func.avg(PokemonPokemon.attack).label('attack'),
+            func.avg(PokemonPokemon.defense).label('defense'),
+            func.avg(PokemonPokemon.special_attack).label('special_attack'),
+            func.avg(PokemonPokemon.special_defense).label('special_defense'),
+            func.avg(PokemonPokemon.speed).label('speed'),
+            func.avg(PokemonPokemon.height).label('height'),
+            func.avg(PokemonPokemon.weight).label('weight')). \
+        group_by(PokemonPokemon.type_1, PokemonPokemon.type_2). \
+        filter(PokemonPokemon.type_1 == pokemon_type[0][0],
+               PokemonPokemon.type_2 == pokemon_type[0][1]). \
+        all()
+
+    return pokemon
+
+def get_data_for_radar(pokemon: str):
+    return [get_status(pokemon), get_status_by_type(pokemon)]
